@@ -1,1 +1,0 @@
-docker build -t generate_parcel2d . -f Dockerfile_GPU
