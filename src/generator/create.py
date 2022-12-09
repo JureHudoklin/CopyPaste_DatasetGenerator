@@ -8,10 +8,9 @@ import matplotlib.pyplot as plt
 from util.utils import box_xyxy_to_xywh, get_bbox_from_mask
 
 from src.image_augmentation.blendings import apply_blendings_and_paste_onto_background
-
 from src.image_augmentation.motion_blur import LinearMotionBlur3C
 from src.image_augmentation.object_position import find_valid_object_position
-
+from src.image_augmentation.occlude_with_bg import occlude_with_bg
 
 def create_image_anno_wrapper(
     args,
@@ -71,9 +70,10 @@ def create_image_anno(
     distractor_ann,
     bg_ann,
     scale=(1, 1),
-    rotation_augment=0,
+    rotation_augment=30,
     blending_list=["none"],
     max_allowed_iou=0.5,
+    occlude_with_background=True,
 ):
     
     all_objects = objects_ann + distractor_ann
@@ -83,20 +83,14 @@ def create_image_anno(
     bg_path = bg_ann["img_path"]
     background= Image.open(bg_path).convert("RGBA")
 
-    # Resize background for width = 1920
-    bg_w, bg_h = background.size
-    background = scale_img_to_dim(background, 1920)
     # Randomly scale down anb up
     scale_ = random.randint(640, 1920)
     background = scale_img_to_dim(background, scale_)
+    # Scale to dim = 1920
     background = scale_img_to_dim(background, 1920)
     bg_w, bg_h = background.size
 
-    # new_w = 1920
-    # new_h = int(bg_h * (new_w / bg_w))
-    # background = background.resize((new_w, new_h), Image.ANTIALIAS)
-    # bg_w, bg_h = background.size
-    
+
     # Create img annotation dict
     already_set_obj = None
     img_annotations = []
@@ -110,12 +104,11 @@ def create_image_anno(
         if not os.path.exists(obj_img_path):
             continue
         obj_img = Image.open(obj_img_path).convert("RGBA")
-        # Scale to max dim = 256
-        obj_img = scale_img_to_dim(obj_img, 256)
-        
+
         # Randomly scale down anb up
         scale_ = random.randint(32, 256)
         obj_img = scale_img_to_dim(obj_img, scale_)
+        # Scale to max dim = 256
         obj_img = scale_img_to_dim(obj_img, 256)
         
         o_w, o_h = obj_img.size
@@ -129,6 +122,10 @@ def create_image_anno(
             scale_factor = np.random.uniform(scale[0], scale[1])
             obj_img = obj_img.resize((int(o_w*scale_factor), int(o_h*scale_factor)), Image.ANTIALIAS)
             o_w, o_h = obj_img.size
+            
+        # Background occlusion
+        if occlude_with_background:
+            occlude_with_bg(obj_img)
             
         ### Extract foreground and mask ###
         foreground = np.array(obj_img.copy())[:, :, :3]

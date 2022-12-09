@@ -23,7 +23,7 @@ def apply_blendings_and_paste_onto_background(
     new_background = background.copy()
     
     if  "none" in blending_method:
-        pass
+        return new_foreground, new_mask, new_background
     if "gaussian" in blending_method:
         new_mask = Image.fromarray(
             cv2.GaussianBlur(PIL2array1C(new_mask), (5, 5), 2)
@@ -39,7 +39,6 @@ def apply_blendings_and_paste_onto_background(
         new_foreground = apply_illumination_change(new_foreground, new_mask)
         new_mask = apply_random_mask_adjustment(new_mask)
     if "poisson" in blending_method:
-        #if blending_method == "poisson":
         new_background = apply_poisson_blending(
             new_foreground, new_mask, new_background, (y, x)
         )

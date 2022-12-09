@@ -12,6 +12,9 @@
 
 Create copy/paste synthetic images for object detection and instance segmentation.
 
+<!-- ADD IMAGES -->
+![example](./examples/syn_ds_img_0.png)
+
 ## Set-up
 Clone the repository
 
@@ -26,7 +29,6 @@ virtualenv -p python3.8 copy_paste_env
 source copy_paste_env/bin/activate
 ```
 
-
 Install python dependencies
 
 ```shell
@@ -35,11 +37,63 @@ pip install -r requirements.txt
 
 ## Configuration
 
+### Image Annotation Files
+To generate a dataset two json annotation files are required.
+1. A json file containing the annotations of the objects
+2. A json file containing the annotations of the background images
+
+- Objects json files should have the following information:
+  List of objects:
+  ```json
+  [
+    {
+      "name": "example_cat", # name-of-the-category
+      "supercategory": "example_super_cat", #name-of-the-super-category
+      "file_name": "my_img_0.jpg", #name-of-the-image-file
+      "img_path": "home/my_home/images/my_img_0.jpg", #absolute-path-to-the-image-file
+    },
+    ...
+  ]
+  ```
+
+- Background json files should have the following information:
+  List of background images:
+  ```json
+  [
+    {
+      "file_name": "my_img_0.jpg", #name-of-the-image-file
+      "img_path": "home/my_home/images/my_img_0.jpg", #absolute-path-to-the-image-file
+    },
+    ...
+  ]
+  ```
+
+
+### Configuration File
+You can configure the dataset generation by editing the config.py file inside the configs folder.
+All options are explained in the config.py file.
+**MAKE SURE TO SET PATHS TO ANNOTATION FILES AND OUTPUT FOLDER INSIDE THE CONFIG FILE.**
+
+If you provide a load_path when creating a new dataset, the config file will be loaded from the provided path.
+```python
+from configs.config import Config
+
+cfg = Config(load_path = "path/to/config/file/filename.json"")
+```
+
+You can also save a config by running the following command:
+```python
+from configs.config import Config
+
+cfg = Config()
+config.save(path)
+```
+
 ## Run
-
-
-## Examples
-
+To generate a dataset you can run generate_dataset.py:
+```shell
+python3 generate_dataset.py
+```
 
 ## Citation
 

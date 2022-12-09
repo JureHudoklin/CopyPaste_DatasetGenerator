@@ -140,7 +140,7 @@ def annotation_to_coco_ann(annotations_raw):
  
 def coco_ann_to_vfn_ann(train_coco_ann):
     """ Convert COCO annotation to VFN annotation format
-    Same as COCO but gruops annotations by category and supercategory
+    Same as COCO but groups annotations by category and supercategory
 
     Parameters
     ----------

@@ -63,7 +63,7 @@ def display_random_ds_img(coco_gt):
 if __name__ == "__main__":
     config = Config()
     
-    if False:
+    if True:
         create_new_dataset(config)
         
     if True:
@@ -75,27 +75,4 @@ if __name__ == "__main__":
             fig = display_random_ds_img(coco_gt)
             plt.savefig(f"syn_ds_img_{i}.png", bbox_inches='tight', pad_inches=0, dpi=500)
             fig.clf()
-    exit()
-  
-        
-    with open(output_dir / "annotations.json", "r") as f:
-        out_ann = json.load(f)
-    coco_gt = annotation_to_coco_ann(out_ann)
     
-    json.dump(coco_gt, open(output_dir / f"{dataset_name}_coco_gt.json", "w"))
-    exit()
-    
-    # print(out_ann)
-    # img_ann = out_ann[0]
-    # img_path = img_ann["img_path"]
-    # bbox = [it["bbox"] for it in img_ann["annotations"]] # cx cy w h
-    
-    # image = plt.imread(img_path)
-    # plt.imshow(image)
-    # # Plot bounding boxes
-    # for it in bbox:
-    #     plt.gca().add_patch(plt.Rectangle((it[0], it[1]), it[2], it[3], fill=False, edgecolor='r', linewidth=2))
-        
-    # plt.savefig(output_dir / "example.png")
-    # exit()
-   
