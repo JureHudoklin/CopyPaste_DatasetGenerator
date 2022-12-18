@@ -5,12 +5,13 @@
 
 # Synthetic Dataset Generation
 
+Create copy/paste synthetic images for object detection and instance segmentation.
+
 > This repository is a modified (and extended) version
 > of [debidatta/syndata-generation](https://github.com/debidatta/syndata-generation) and [a-nau/synthetic-dataset-generation](https://github.com/a-nau/synthetic-dataset-generation/actions)
 > The augmentation code is not changed. The code was made more modular All credits to the original authors (also see [Citation](#citation)).
 >
 
-Create copy/paste synthetic images for object detection and instance segmentation.
 
 <!-- ADD IMAGES -->
 ![example](./examples/syn_ds_img_0.png)
